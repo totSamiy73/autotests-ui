@@ -4,7 +4,6 @@ from playwright.sync_api import Playwright, Page
 
 @pytest.fixture()
 def initialize_browser_state(playwright: Playwright):
-
     browser = playwright.chromium.launch()
     context = browser.new_context()
     page = context.new_page()
@@ -21,6 +20,7 @@ def initialize_browser_state(playwright: Playwright):
     button_registration.click()
 
     context.storage_state(path="browser-state.json")
+
 
 @pytest.fixture()
 def chromium_page_with_state(initialize_browser_state, playwright: Playwright) -> Page:
