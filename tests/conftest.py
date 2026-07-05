@@ -2,7 +2,7 @@ import pytest
 from playwright.sync_api import Playwright, Page
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def initialize_browser_state(playwright: Playwright):
     browser = playwright.chromium.launch()
     context = browser.new_context()
