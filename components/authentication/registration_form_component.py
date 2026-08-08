@@ -1,32 +1,33 @@
 from components.base_component import BaseComponent
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page
+
+from elements.input import Input
 
 
 class RegistrationFormComponent(BaseComponent):
 
     def __init__(self, page: Page):
         super().__init__(page)
-
-        self.field_email = page.get_by_test_id("registration-form-email-input").locator("input")
-        self.field_username = page.get_by_test_id("registration-form-username-input").locator("input")
-        self.field_password = page.get_by_test_id("registration-form-password-input").locator("input")
+        self.field_email = Input(page, "registration-form-email-input", "Email")
+        self.field_username = Input(page, "registration-form-username-input", "Username")
+        self.field_password = Input(page, "registration-form-password-input", "Password")
 
     def fill(self, email: str, username: str, password: str):
-        self.field_email.press_sequentially(email, delay=100)
-        expect(self.field_email).to_have_value(email)
+        self.field_email.fill_manual_emulation(email)
+        self.field_email.check_have_value(email)
 
-        self.field_username.press_sequentially(username, delay=100)
-        expect(self.field_username).to_have_value(username)
+        self.field_username.fill_manual_emulation(username)
+        self.field_username.check_have_value(username)
 
-        self.field_password.press_sequentially(password, delay=100)
-        expect(self.field_password).to_have_value(password)
+        self.field_password.fill_manual_emulation(password)
+        self.field_password.check_have_value(password)
 
     def check_visible(self, email: str = "", username: str = "", password: str = ""):
-        expect(self.field_email).to_be_visible()
-        expect(self.field_email).to_have_value(email)
+        self.field_email.check_visible()
+        self.field_email.check_have_value(email)
 
-        expect(self.field_username).to_be_visible()
-        expect(self.field_username).to_have_value(username)
+        self.field_username.check_visible()
+        self.field_username.check_have_value(username)
 
-        expect(self.field_password).to_be_visible()
-        expect(self.field_password).to_have_value(password)
+        self.field_password.check_visible()
+        self.field_password.check_have_value(password)
