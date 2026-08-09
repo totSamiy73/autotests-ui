@@ -1,7 +1,11 @@
 from components.base_component import BaseComponent
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page
 from components.courses.course_view_menu_component import CourseViewMenuComponent
 from dataclasses import dataclass
+
+from elements.image import Image
+from elements.text import Text
+
 
 @dataclass
 class CheckVisibleCourseCardParams:
@@ -11,6 +15,7 @@ class CheckVisibleCourseCardParams:
     min_score: str
     estimated_time: str
 
+
 class CourseViewComponent(BaseComponent):
 
     def __init__(self, page: Page):
@@ -18,23 +23,23 @@ class CourseViewComponent(BaseComponent):
 
         self.menu = CourseViewMenuComponent(page)
 
-        self.title = page.get_by_test_id('course-widget-title-text')
-        self.image = page.get_by_test_id('course-preview-image')
-        self.max_score_text = page.get_by_test_id('course-max-score-info-row-view-text')
-        self.min_score_text = page.get_by_test_id('course-min-score-info-row-view-text')
-        self.estimated_text = page.get_by_test_id('course-estimated-time-info-row-view-text')
+        self.title = Text(page, 'course-widget-title-text', 'Title')
+        self.image = Image(page, 'course-preview-image', 'Preview')
+        self.max_score_text = Text(page, 'course-max-score-info-row-view-text', 'Max score')
+        self.min_score_text = Text(page, 'course-min-score-info-row-view-text', 'Min score')
+        self.estimated_text = Text(page, 'course-estimated-time-info-row-view-text', 'Estimated time')
 
     def check_visible(self, params: CheckVisibleCourseCardParams):
-        expect(self.image.nth(params.index)).to_be_visible()
+        self.image.check_visible(nth=params.index)
 
-        expect(self.title.nth(params.index)).to_be_visible()
-        expect(self.title.nth(params.index)).to_have_text(params.title)
+        self.title.check_visible(nth=params.index)
+        self.title.check_have_text(params.title, nth=params.index)
 
-        expect(self.max_score_text.nth(params.index)).to_be_visible()
-        expect(self.max_score_text.nth(params.index)).to_contain_text(f'Max score: {params.max_score}')
+        self.max_score_text.check_visible(nth=params.index)
+        self.max_score_text.check_have_text(f'Max score: {params.max_score}', nth=params.index)
 
-        expect(self.min_score_text.nth(params.index)).to_be_visible()
-        expect(self.min_score_text.nth(params.index)).to_contain_text(f'Min score: {params.min_score}')
+        self.min_score_text.check_visible(nth=params.index)
+        self.min_score_text.check_have_text(f'Min score: {params.min_score}', nth=params.index)
 
-        expect(self.estimated_text.nth(params.index)).to_be_visible()
-        expect(self.estimated_text.nth(params.index)).to_have_text(f'Estimated time: {params.estimated_time}')
+        self.estimated_text.check_visible(nth=params.index)
+        self.estimated_text.check_have_text(f'Estimated time: {params.estimated_time}', nth=params.index)

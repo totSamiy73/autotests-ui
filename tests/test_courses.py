@@ -45,7 +45,7 @@ def test_create_course(courses_list_page: CoursesListPage, create_course_page: C
     courses_list_page.course_view.check_visible(CheckVisibleCourseCardParams(
         index=0,
         title="Playwright",
-        max_score="10",
-        min_score="1",
+        max_score="100",
+        min_score="10",
         estimated_time="2 weeks"
     ))
