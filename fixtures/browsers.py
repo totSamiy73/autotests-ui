@@ -1,6 +1,9 @@
 import pytest
 from playwright.sync_api import Playwright, Page
 
+from pages.authentication.registration_page import RegistrationPage
+
+
 @pytest.fixture()
 def chromium_page(playwright: Playwright):
     browser = playwright.chromium.launch(headless=False)
@@ -14,17 +17,11 @@ def initialize_browser_state(playwright: Playwright):
     context = browser.new_context()
     page = context.new_page()
 
-    page.goto("https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/auth/registration")
-
-    field_email = page.get_by_test_id("registration-form-email-input").locator("input")
-    field_email.press_sequentially("user.name@gmail.com", delay=100)
-    field_username = page.get_by_test_id("registration-form-username-input").locator("input")
-    field_username.press_sequentially("username", delay=100)
-    field_password = page.get_by_test_id("registration-form-password-input").locator("input")
-    field_password.press_sequentially("password", delay=100)
-    button_registration = page.get_by_test_id("registration-page-registration-button")
-    button_registration.click()
-
+    registration_page = RegistrationPage(page)
+    registration_page.vizit("https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/auth/registration")
+    registration_page.form.check_visible()
+    registration_page.form.fill("user.name@gmail.com", "username", "password")
+    registration_page.button_registration.click()
     context.storage_state(path="browser-state.json")
 
 
