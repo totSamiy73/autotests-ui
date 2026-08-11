@@ -1,12 +1,27 @@
 from pages.courses.create_course_page import CreateCoursePage
 from pages.courses.courses_list_page import CoursesListPage, CheckVisibleCourseCardParams
 import pytest
+import allure
+from tools.allure.tags import AllureTag
+from tools.allure.features import AllureFeature
+from tools.allure.epics import AllureEpic
+from tools.allure.stories import AlluresStory
+from allure_commons.types import Severity
 
 
+@allure.epic(AllureEpic.LMS)
+@allure.feature(AllureFeature.COURSES)
+@allure.story(AlluresStory.COURSES)
+@allure.parent_suite(AllureEpic.LMS)
+@allure.suite(AllureFeature.COURSES)
+@allure.sub_suite(AlluresStory.COURSES)
+@allure.tag(AllureTag.COURSES, AllureTag.REGRESSION)
 @pytest.mark.courses
 @pytest.mark.regression
 class TestCourses:
 
+    @allure.severity(Severity.NORMAL)
+    @allure.title("Check displaying of empty courses list")
     def test_empty_courses_list(self, courses_list_page: CoursesListPage):
         courses_list_page.vizit("https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/courses")
 
@@ -16,6 +31,8 @@ class TestCourses:
         courses_list_page.toolbar_view.check_visible()
         courses_list_page.check_visible_empty_view()
 
+    @allure.severity(Severity.CRITICAL)
+    @allure.title("Create course")
     def test_create_course(self, courses_list_page: CoursesListPage, create_course_page: CreateCoursePage):
         create_course_page.vizit('https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/courses/create')
         create_course_page.course_toolbar_view.check_visible()
@@ -48,6 +65,8 @@ class TestCourses:
             estimated_time="2 weeks"
         ))
 
+    @allure.severity(Severity.NORMAL)
+    @allure.title("Create and edit course")
     def test_edit_course(self, courses_list_page: CoursesListPage, create_course_page: CreateCoursePage):
         create_course_page.vizit("https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/courses/create")
         create_course_page.image_upload_widget.upload_preview_image('./testdata/files/image.png')
