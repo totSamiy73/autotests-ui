@@ -89,8 +89,7 @@ class TestCourses:
             estimated_time="2 weeks"
         ))
 
-        courses_list_page.course_view.menu.menu_button.click()
-        courses_list_page.course_view.menu.edit_menu_button.click()
+        courses_list_page.course_view.menu.click_edit(index=0)
         create_course_page.form.fill(
             title="test edit",
             estimated_time="1 hour",
